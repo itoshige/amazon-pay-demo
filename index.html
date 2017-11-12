@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<title>Amazon Pay Demo</title>
+	</head>
+	<body>
+	    
+		<div id="AmazonPayButton"></div>
+
+		<script type='text/javascript'>
+		var merchantId = 'ASKZOQVR9ZZJZ';
+		var clientId = 'amzn1.application-oa2-client.6827941495a24987b010d42bc906291b';
+
+		window.onAmazonLoginReady = function() {
+			amazon.Login.setClientId(clientId);
+		};
+
+		window.onAmazonPaymentsReady = function() {
+			showButton();
+		};
+
+		function showButton() {
+			var authRequest;
+			OffAmazonPayments.Button("AmazonPayButton", merchantId, {
+					type: "PwA",
+					color: "Gold",
+					size: "large",
+				authorization: function () {
+					loginOptions = { scope: "profile payments:widget payments:shipping_address", popup: true };
+					authRequest = amazon.Login.authorize(loginOptions, "https://amazon-pay-php-itoshige.c9users.io/recurring-payments/placeOrder.php");
+				}, 
+				onError: function(error) {
+							alert("The following error occurred: " 
+									+ error.getErrorCode() 
+									+ ' - ' + error.getErrorMessage());
+						}
+			});
+		}
+		</script>
+		<script async='async' type="text/javascript" src="https://static-fe.payments-amazon.com/OffAmazonPayments/jp/sandbox/lpa/js/Widgets.js"></script>
+	</body>
+</html>
